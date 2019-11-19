@@ -6,3 +6,8 @@
     name: "{{ ossec_init_name }}"
     state: restarted
     enabled: yes
+
+- name: restart ossec-server
+  shell: |
+    /var/ossec/bin/ossec-control restart
+  delegate_to: "{{ ossec_server_name }}"
