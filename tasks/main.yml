@@ -41,6 +41,7 @@
 - name: "Check if client.keys exists"
   stat:
     path: /var/ossec/etc/client.keys
+  when: not ossec_agent_install_only
   register: check_keys
   tags:
     - config
@@ -48,7 +49,8 @@
 - name: "Check if client.keys exists on ossec-server"
   stat:
     path: /var/ossec/etc/client.keys
-  when: ossec_managed_server
+  when:
+    - ossec_managed_server and not ossec_agent_install_only
   delegate_to: "{{ ossec_server_name }}"
   register: check_server_keys
   tags:
@@ -58,7 +60,7 @@
   service:
     name: ossec-authd
     state: started
-  when: ossec_managed_server and not check_keys.stat.exists and ossec_server_name|default("") != ""
+  when: ossec_managed_server and not check_keys.stat.exists and ossec_server_name|default("") != "" and not ossec_agent_install_only
   delegate_to: "{{ ossec_server_name }}"
   run_once: true
   tags:
@@ -68,7 +70,8 @@
   pause:
     minutes: 2
     prompt: 'Please execute the following command on your ossec-server: "service ossec-authd start"'
-  when: 
+  when:
+    - not ossec_agent_install_only
     - not ossec_managed_server
     - not check_keys.stat.exists or ossec_server_name|default("") == ""
   tags:
@@ -81,18 +84,20 @@
   tags:
     - config
     - skip_ansible_lint
+  when: not ossec_agent_install_only
 
 - name: Set permissions on client.keys file
   file:
     dest: /var/ossec/etc/client.keys
     mode: 0640
+  when: not ossec_agent_install_only
 
 - name: "kill the auth-daemon on server {{ ossec_server_name }}"
   service:
     name: ossec-authd
     state: stopped
   delegate_to: "{{ ossec_server_name }}"
-  when: ossec_managed_server and not check_keys.stat.exists and ossec_server_name|default("") != ""
+  when: ossec_managed_server and not check_keys.stat.exists and ossec_server_name|default("") != "" and not ossec_agent_install_only
   run_once: true
   tags:
     - config
@@ -101,12 +106,17 @@
   pause:
     minutes: 2
     prompt: 'Please execute the following command on your ossec-server: "service ossec-authd stop"'
-  when: not ossec_managed_server and not check_keys.stat.exists and ossec_server_name|default("") == ""
+  when:
+    - not ossec_agent_install_only
+    - not ossec_managed_server
+    - not check_keys.stat.exists
+    - ossec_server_name|default("") == ""
+
 
 - name: "Restart ossec-remoted on server. If this is the first agent added it will not be running."
   shell: /var/ossec/bin/ossec-control restart
   delegate_to: "{{ ossec_server_name }}"
-  when: ossec_managed_server and not check_server_keys.stat.exists and ossec_server_name|default("") != ""
+  when: ossec_managed_server and not check_server_keys.stat.exists and ossec_server_name|default("") != "" and not ossec_agent_install_only
   run_once: true
   tags:
     - skip_ansible_lint
@@ -115,13 +125,16 @@
   pause:
     minutes: 2
     prompt: 'Please execute the following command on your ossec-server: "/var/ossec/bin/ossec-control restart"'
-  when: 
+  when:
+    - not ossec_agent_install_only
     - not ossec_managed_server
     - not check_server_keys.stat.exists|default(false)
     - ossec_server_name|default("") == ""
+
 
 - name: "Start ossec-agent if not already running"
   service:
     name: "{{ ossec_init_name }}"
     state: started
     enabled: yes
+  when: not ossec_agent_install_only

@@ -6,6 +6,7 @@
     name: "{{ ossec_init_name }}"
     state: restarted
     enabled: yes
+  when: not ossec_agent_install_only
 
 - name: restart ossec-server
   shell: |
