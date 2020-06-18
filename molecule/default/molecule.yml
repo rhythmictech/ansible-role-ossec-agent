@@ -3,10 +3,6 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
-  options:
-    config-file: molecule/default/yaml-lint.yml
 
 platforms:
   - name: ossec-server-centos
@@ -41,10 +37,14 @@ platforms:
     networks:
       - name: ossec
 
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
+
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
   inventory:
     group_vars:
       server:
