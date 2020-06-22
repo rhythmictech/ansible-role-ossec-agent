@@ -37,7 +37,10 @@ platforms:
     networks:
       - name: ossec
 
-lint: |
+ |
+  set -e
+  yamllint .
+  ansible-lint |
   set -e
   yamllint .
   ansible-lint
@@ -100,7 +103,3 @@ provisioner:
 
 scenario:
   name: default
-verifier:
-  name: testinfra
-  lint:
-    name: flake8
