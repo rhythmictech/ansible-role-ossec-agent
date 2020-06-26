@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include my-new-role"
+      include_role:
+        name: "ansible-ossec-agent"

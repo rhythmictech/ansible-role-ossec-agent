@@ -12,3 +12,4 @@
   apt:
     pkg: ossec-hids-agent
     state: present
+

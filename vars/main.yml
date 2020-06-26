@@ -1,0 +1,5 @@
+---
+# vars file for my-new-role
+ossec_server_ip: 192.168.1.11
+ossec_server_name: ossec-master.ops.carejourney.com
+
