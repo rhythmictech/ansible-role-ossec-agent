@@ -1,5 +1,5 @@
 - name: Install the correct repository
-  include_tasks: "{{ ansible_os_family }}.yml"
+  include_tasks: "{{ ansible_distribution }}.yml"
   when: (ossec_disable_public_repos is not defined) or (ossec_disable_public_repos != 'yes')
 
 - name: "TEST"
