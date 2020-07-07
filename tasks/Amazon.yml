@@ -1,0 +1,19 @@
+# tasks specific to Amazon Linux
+- name: "Amazon | set some facts"
+  set_fact:
+    ansible_distribution: amazon
+  when:
+    ansible_distribution == "Amazon"
+- name: "Amazon | Install agent"
+  yum:
+    name: "https://www.atomicorp.com/channels/atomic/amazon/{{ ansible_distribution_major_version }}/x86_64/RPMS/ossec-hids-{{ ossec_server_atomic_release }}.amzn2.art.x86_64.rpm"
+    state: present
+- name: "Amazon | Install agent"
+  yum:
+    name: "https://www.atomicorp.com/channels/atomic/amazon/{{ ansible_distribution_major_version }}/x86_64/RPMS/{{ ossec_agent_package_name }}-{{ ossec_server_atomic_release }}.amzn2.art.x86_64.rpm"
+    state: present
+
+- name: "Amazon | Install epel repo"
+  yum:
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+    state: present

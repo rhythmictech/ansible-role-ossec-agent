@@ -1,8 +1,7 @@
 ---
-# defaults file for ossec-agent
-
-ossec_server_name: ""
+# defaults file for my-new-role
+ossec_server_name: "ossec-master.ops.carejourney.com"
 ossec_managed_server: true
-ossec_server_atomic_release: 1.0-21
+ossec_server_atomic_release: 3.6.0-11279
 ossec_agent_package_name: ossec-hids-agent
-ossec_agent_install_only: false
+ossec_agent_install_only: true

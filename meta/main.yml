@@ -1,27 +1,14 @@
 ---
+
 galaxy_info:
-  author: Werner Dijkerman
-  description: Installing and maintaining the ossec-agent.
-  company: myCompany.Dotcom
+  author: Rhythmic Operations <opsteam@rhythmictech.com>
+  description: Ansible Role to install OSSEC HIDS Agent
+  company: Rhythmic Technologies, Inc.
   license: MIT
-  min_ansible_version: 2.4
+  min_ansible_version:
   platforms:
-    - name: EL
+    - name: Amazon Linux
       versions:
-        - 5
-        - 6
-        - 7
-    - name: Fedora
-      versions:
-        - all
-    - name: Debian
-      versions:
-        - all
-  categories:
-    - monitoring
-  galaxy_tags:
-    - ossec
-    - ossec-agent
-    - hids
-    - monitoring
+        - "2"
+
 dependencies: []
