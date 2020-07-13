@@ -114,7 +114,11 @@
 - name: "Restart ossec-remoted on server. If this is the first agent added it will not be running."
   shell: /var/ossec/bin/ossec-control restart
   delegate_to: "{{ ossec_server_name }}"
-  when: ossec_managed_server and not check_server_keys.stat.exists and ossec_server_name|default("") != "" not ossec_agent_install_only
+  when: 
+    - ossec_managed_server 
+    - not check_server_keys.stat.exists 
+    - ossec_server_name|default("") != "" 
+    - not ossec_agent_install_only
   run_once: true
   tags:
     - skip_ansible_lint
