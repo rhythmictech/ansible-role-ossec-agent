@@ -106,10 +106,10 @@
     minutes: 2
     prompt: 'Please execute the following command on your ossec-server: "service ossec-authd stop"'
   when: 
-    - not ossec_managed_server 
-    - not check_keys.stat.exists 
-    - ossec_server_name|default("") == "" 
     - not ossec_agent_install_only
+    - not ossec_managed_server
+    - not check_keys.stat.exists
+    - ossec_server_name|default("") == ""
 
 - name: "Restart ossec-remoted on server. If this is the first agent added it will not be running."
   shell: /var/ossec/bin/ossec-control restart
