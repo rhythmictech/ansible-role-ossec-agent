@@ -127,7 +127,11 @@
   pause:
     minutes: 2
     prompt: 'Please execute the following command on your ossec-server: "/var/ossec/bin/ossec-control restart"'
-  when: not ossec_managed_server and not check_server_keys.stat.exists and ossec_server_name|default("") == "" and not ossec_agent_install_only
+  when: 
+    - not ossec_agent_install_only
+    - not ossec_managed_server
+    - not check_server_keys.stat.exists|default(false)
+    - ossec_server_name|default("") == ""
 
 - name: "Start ossec-agent if not already running"
   service:
