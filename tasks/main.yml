@@ -69,9 +69,12 @@
   pause:
     minutes: 2
     prompt: 'Please execute the following command on your ossec-server: "service ossec-authd start"'
-  when: not ossec_managed_server and not check_keys.stat.exists or ossec_server_name|default("") == "" and not ossec_agent_install_only
   tags:
     - skip_ansible_lint
+  when:
+    - not ossec_agent_install_only
+    - not ossec_managed_server
+    - not check.keys.stats.exists or ossec_server_name|default("") == ""
 
 - name: "register client"
   shell: "/var/ossec/bin/agent-auth -m {{ ossec_server_ip|default(ossec_server_fqdn) }} -p 1515 -A '{{ ossec_agent_name|default(ansible_hostname) }}'"
